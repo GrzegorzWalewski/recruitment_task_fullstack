@@ -20,7 +20,15 @@ class ExchangeRatesController extends AbstractController
 
   public function getExchangeRates(?string $date): Response
   {
-    $date = ($date === null) ? 'today' : date('Y-m-d', strtotime($date));
+    $date = ($date === null) ? date('Y-m-d') : date('Y-m-d', strtotime($date));
+    $dateForValidation = new \DateTime($date);
+    $minDate = new \DateTime('2023-01-01');
+    $maxDate = new \DateTime('now');
+
+    if ($dateForValidation < $minDate || $dateForValidation > $maxDate)
+    {
+      return new Response(json_encode(['message' => 'Date out of scope']), Response::HTTP_BAD_REQUEST);
+    }
 
     try {
       $rates = $this->exchangeRatesApi->getRatesForAllCurrencies($date);

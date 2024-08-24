@@ -5,6 +5,8 @@ export default function SimpleDatePicker({setSelectedDate, selectedDate}) {
     setSelectedDate(e.target.value);
   };
 
+  const today = new Date().toISOString().split('T')[0];
+
   return (
       <div className='text-center'>
           <label htmlFor="date">Choose a date: </label>
@@ -13,6 +15,7 @@ export default function SimpleDatePicker({setSelectedDate, selectedDate}) {
                 value={selectedDate}
                 onChange={handleDateChange}
                 min="2023-01-01"
+                max={today}
             />
       </div>
   );
