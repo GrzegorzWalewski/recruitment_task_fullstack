@@ -22,11 +22,7 @@ class NBPExchangeRatesApiService implements ExchangeRatesApiInterface
           continue;
         }
 
-        if (in_array($code, ExchangeRatesApiInterface::BUY_CURRENCIES)) {
-          $buyRate = $this->getBuyRate($rate) ?? '-';
-        } else {
-          $buyRate = '-';
-        }
+        $buyRate = (in_array($code, ExchangeRatesApiInterface::BUY_CURRENCIES)) ? $this->getBuyRate($rate) ?? '-' : '-';
 
         $sellRate = $this->getSellRate($rate) ?? '-';
 
@@ -50,6 +46,8 @@ class NBPExchangeRatesApiService implements ExchangeRatesApiInterface
       if (in_array($rate['code'], ExchangeRatesApiInterface::SMALL_FEE_CURRENCIES)) {
         return round((float) $rate['mid'] + ExchangeRatesApiInterface::SMALL_BUY_FEE, ExchangeRatesApiInterface::ROUND_AFTER);
       }
+
+      return null;
     }
 
     private function getExchangeRates(string $date): array
@@ -61,9 +59,9 @@ class NBPExchangeRatesApiService implements ExchangeRatesApiInterface
       try {
         $content = $response->getContent();
       } catch (Exception $e) {
-          if ($statusCode === 404) {
-            throw new NoDataException();
-          }
+        if ($statusCode === 404) {
+          throw new NoDataException();
+        }
       }
 
       if ($statusCode !== 200) {

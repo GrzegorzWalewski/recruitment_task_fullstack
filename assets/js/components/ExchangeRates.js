@@ -88,8 +88,6 @@ class ExchangeRates extends Component {
         }
 
         this.setState({ rates: stateRates });
-
-        console.log(this.state.rates);
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -111,8 +109,6 @@ class ExchangeRates extends Component {
                 </tr>
             );
         }
-        
-        console.log(ratesList);
 
         return(
             <div>

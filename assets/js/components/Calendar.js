@@ -1,8 +1,6 @@
 import React from 'react';
 
 export default function SimpleDatePicker({setSelectedDate, selectedDate}) {
-  console.log(setSelectedDate);
-  console.log('arst');
   const handleDateChange = (e) => {
     setSelectedDate(e.target.value);
   };
