@@ -8,7 +8,8 @@ class ExchangeRates extends Component {
         this.state = {
             selectedDate: '',
             rates: [],
-            loading: true
+            loading: true,
+            errorMessage: ''
         };
     }
 
@@ -45,6 +46,7 @@ class ExchangeRates extends Component {
 
     getExchangeRates(date = '') {
         this.setState({ loading: true });
+        this.setState({ errorMessage: '' });
 
         const baseUrl = this.getBaseUrl();
 
@@ -54,8 +56,8 @@ class ExchangeRates extends Component {
             } else {
                 this.updateRates(response.data);
             }
-        }).catch(function (error) {
-            console.error(error);
+        }).catch((error) => {
+            this.setState({ errorMessage: error.response.data.message });
         }).finally(() => {
             this.setState({ loading: false });
         });
@@ -120,7 +122,8 @@ class ExchangeRates extends Component {
                                     Exchange Rates
                                 </h2>
                                 <SimpleDatePicker selectedDate={this.state.selectedDate} setSelectedDate={this.handleDateChange.bind(this)}/>
-                                {this.state.loading || !this.state.selectedDate ? (
+                                {this.state.errorMessage ? (<p className="text-danger">{this.state.errorMessage}</p>)
+                                : this.state.loading || !this.state.selectedDate ? (
                                     <div className={'text-center'}>
                                         {!this.state.selectedDate ? (
                                             <span className='text-info'>Choose date to get exchange rates</span>

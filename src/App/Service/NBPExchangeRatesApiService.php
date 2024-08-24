@@ -9,6 +9,11 @@ use Symfony\Component\HttpClient\HttpClient;
 
 class NBPExchangeRatesApiService implements ExchangeRatesApiInterface
 {
+    public const API_HOST = 'https://api.nbp.pl/api';
+    public const TABLE = 'A';
+    public const EXCHANGE_TABLES_PATH = '/exchangerates/tables/';
+    public const EXCHANGE_RATES_PATH = '/exchangerates/rates/';
+
     public function getRatesForAllCurrencies(string $date): array
     {
       $result = [];
@@ -53,7 +58,7 @@ class NBPExchangeRatesApiService implements ExchangeRatesApiInterface
     private function getExchangeRates(string $date): array
     {
       $client = HttpClient::create();
-      $response = $client->request('GET', "https://api.nbp.pl/api/exchangerates/tables/A/$date?format=json");
+      $response = $client->request('GET', sprintf("%s%s/%s/%s?format=json", self::API_HOST, self::EXCHANGE_TABLES_PATH, self::TABLE, $date));
       $statusCode = $response->getStatusCode();
 
       try {
